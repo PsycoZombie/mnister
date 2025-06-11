@@ -7,4 +7,4 @@ final double maxIntensity = 255;
 final double cellWidth = canvasWidth / colSize;
 final double cellHeight = canvasHeight / rowSize;
 final double falloffRadius = 2.5;
-final double falloffSigma = 1;
+final double falloffSigma = 0.8;

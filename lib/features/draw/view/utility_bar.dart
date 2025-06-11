@@ -24,7 +24,7 @@ class UtilityBar extends ConsumerWidget {
           },
         ),
         Text(
-          "${prediction == -1 ? 'draw to predict ' : "predicted $prediction?"}",
+          prediction == -1 ? 'draw to predict ' : "predicted $prediction?",
         ),
       ],
     );
