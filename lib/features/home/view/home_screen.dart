@@ -9,15 +9,28 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('Home')),
       body: Center(
-        child: Center(
-          child: Column(
-            children: [
-              ElevatedButton(
-                child: Text("go to canvas scren"),
-                onPressed: (){context.push('/canvas');},
+        // center entire body
+        child: Stack(
+          alignment: Alignment.center, // center children in stack
+          children: [
+            Image.asset(
+              'assets/silly_logo.webp', // make sure the path is correct
+              width: 500,
+              height: 500,
+            ),
+            OutlinedButton(
+              onPressed: () {
+                context.push('/canvas');
+              },
+              child: const Text(
+                "Go to Canvas Screen",
+                style: TextStyle(
+                  color: Colors.red,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

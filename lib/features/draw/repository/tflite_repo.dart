@@ -3,19 +3,24 @@ import 'package:mnister/core/tflite/tflite_service.dart';
 import 'package:mnister/providers/image_grid_provider.dart';
 import 'package:mnister/providers/prediction_provider.dart';
 
-Future<int> predict(WidgetRef ref) async {
+Future predict(WidgetRef ref) async {
+  final predictionNotifier = ref.read(predictionProvider.notifier);
   final gridNotifier = ref.read(imageGridProvider.notifier);
   final tfliteService = TFLiteService();
-  await tfliteService.init();
   final imageGridMatrix = gridNotifier.imageGridAsMatrix;
+  await tfliteService.init();
+  final isBlank = imageGridMatrix.every(
+    (row) => row.every((pixel) => pixel == 0.0),
+  );
+  if (isBlank) return;
   final prediction = await tfliteService.runInference(imageGridMatrix);
-  print('Predicted digit: $prediction');
+  predictionNotifier.setPrediction(prediction);
   gridNotifier.printImage();
-  ref.read(predictionProvider.notifier).setPrediction(prediction);
-  return prediction;
 }
 
-void clearGrid(WidgetRef ref){
+void clearGrid(WidgetRef ref) {
   final gridNotifier = ref.read(imageGridProvider.notifier);
+  final predictionNotifier = ref.read(predictionProvider.notifier);
   gridNotifier.clearGrid();
+  predictionNotifier.setPrediction(-1);
 }

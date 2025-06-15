@@ -14,10 +14,9 @@ class CanvasScreen extends ConsumerWidget {
               padding: const EdgeInsets.fromLTRB(0,69,0,0),
               child: Canvas(),
             ),
-            UtilityBar(),
+            Align(alignment: Alignment.center, child: UtilityBar()),
         ]
       )
     );
   }
 }
-

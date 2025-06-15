@@ -4,15 +4,16 @@ from flask import Flask, request, jsonify
 import numpy as np
 from tensorflow import keras
 
-# Add virtual environment site-packages to path
+# Optional: Load venv site-packages if needed
 venv_path = os.path.join(os.path.dirname(__file__), 'venv', 'Lib', 'site-packages')
 if os.path.exists(venv_path):
     sys.path.append(venv_path)
 
 app = Flask(__name__)
 
-# Load the model once at startup
-model = keras.models.load_model('D:\\Desktop\\cats\\mnister\\assets\\models\\mnist_model.h5')
+# Load your trained CNN model (.h5 format)
+model_path = 'D:\\Desktop\\cats\\mnister\\assets\\models\\mnist_cnn_model.h5'
+model = keras.models.load_model(model_path)
 
 @app.route('/predict', methods=['POST', 'OPTIONS'])
 def mnist_predict():
@@ -21,19 +22,27 @@ def mnist_predict():
         'Access-Control-Allow-Methods': 'POST',
         'Access-Control-Allow-Headers': 'Content-Type'
     }
-    
+
     if request.method == 'OPTIONS':
         return ('', 204, headers)
+
     try:
         data = request.get_json()
-        grid = data.get('grid', [])
-        input_data = np.array(grid).reshape(1, 28, 28, 1)
-        prediction = model.predict(input_data).argmax()
+        grid = data.get('grid')
+
+        if grid is None or len(grid) != 28 or len(grid[0]) != 28:
+            return jsonify({"error": "Invalid input shape"}), 400, headers
+
+        # Normalize input (ensure values are 0–1)
+        input_array = np.array(grid).astype(np.float32).reshape(1, 28, 28, 1)
+        prediction_logits = model.predict(input_array)
+        predicted_class = int(np.argmax(prediction_logits))
+
         return jsonify({
-            "prediction": int(prediction),
+            "prediction": predicted_class,
             "status": "success"
         }), 200, headers
-    
+
     except Exception as e:
         return jsonify({"error": str(e)}), 400, headers
 

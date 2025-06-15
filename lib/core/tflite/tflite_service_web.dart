@@ -1,9 +1,10 @@
 import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 
 class TFLiteService {
   Future<void> init() async {
-    // No init needed for web API
+    // No initialization needed for Flask
   }
 
   Future<int> runInference(List<List<double>> grid) async {
@@ -23,6 +24,6 @@ class TFLiteService {
   }
 
   void close() {
-    // Nothing to close
+    // Nothing to clean up
   }
 }

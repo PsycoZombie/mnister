@@ -9,22 +9,30 @@ class UtilityBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final prediction = ref.watch(predictionProvider);
-    return Row(
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        ElevatedButton(
-          onPressed: () {
-            clearGrid(ref);
-          },
-          child: Text('clear'),
-        ),
-        ElevatedButton(
-          child: Text('predict'),
-          onPressed: () async {
-            predict(ref);
-          },
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                clearGrid(ref);
+              },
+              child: Text('Clear'),
+            ),
+            ElevatedButton(
+              child: Text('Predict'),
+              onPressed: () async {
+                predict(ref);
+              },
+            ),
+          ],
         ),
         Text(
-          prediction == -1 ? 'draw to predict ' : "predicted $prediction?",
+          prediction == -1 ? 'Draw to predict ' : "Predicted $prediction?",
+          style: TextStyle(fontSize: 21, color: Colors.red),
         ),
       ],
     );
